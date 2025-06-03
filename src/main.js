@@ -1,6 +1,10 @@
 // main.js
 const { app, BrowserWindow, session } = require('electron'); // <-- Ensure 'session' is imported here
 const path = require('node:path');
+const Database = require('better-sqlite3');
+
+const dbPath = path.join(app.getPath('userData'), 'database.db');
+const db = new Database(dbPath);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
