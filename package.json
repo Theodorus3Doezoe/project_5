@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@craco/craco": "^7.1.0",
+    "better-sqlite3": "^11.10.0",
     "electron-squirrel-startup": "^1.0.1",
     "leaflet": "^1.9.4",
     "react": "^19.1.0",
