@@ -25,7 +25,7 @@ const createWindow = () => {
 
   // --- ADD THIS BLOCK TO ENFORCE CSP DIRECTLY IN MAIN PROCESS ---
   mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-    const cspValue = "default-src 'self'; img-src 'self' data: https://*.tile.openstreetmap.org https://unpkg.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; connect-src 'self' https://localhost:7063;";
+    const cspValue = "default-src 'self'; img-src 'self' data: https://*.tile.openstreetmap.org https://unpkg.com https://server.arcgisonline.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; connect-src 'self' https://localhost:7063 https://ipapi.co;";
 
     // This will replace any existing Content-Security-Policy header
     // from the dev server or meta tag.
