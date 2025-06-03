@@ -37,7 +37,7 @@
     "style-loader": "^3.3.4"
   },
   "dependencies": {
-    "@craco/craco": "^7.1.0",
+    "@craco/craco": "^5.9.0",
     "electron-squirrel-startup": "^1.0.1",
     "leaflet": "^1.9.4",
     "react": "^19.1.0",
