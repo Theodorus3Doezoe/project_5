@@ -1,0 +1,6 @@
+{
+  "presets": [
+    "@babel/preset-env", // Deze is er waarschijnlijk al
+    "@babel/preset-react"
+  ]
+}
