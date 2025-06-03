@@ -1,4 +1,5 @@
-const { app, BrowserWindow } = require('electron');
+// main.js
+const { app, BrowserWindow, session } = require('electron'); // <-- Ensure 'session' is imported here
 const path = require('node:path');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -13,14 +14,27 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+      // Consider adding nodeIntegration and contextIsolation based on your preload usage
+      // nodeIntegration: false,
+      // contextIsolation: true, // Recommended for security
     },
   });
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // --- ADD THIS BLOCK TO ENFORCE CSP DIRECTLY IN MAIN PROCESS ---
+  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    const cspValue = "default-src 'self'; img-src 'self' data: https://*.tile.openstreetmap.org https://unpkg.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; connect-src 'self' https://localhost:7063;";
+
+    // This will replace any existing Content-Security-Policy header
+    // from the dev server or meta tag.
+    details.responseHeaders['Content-Security-Policy'] = [cspValue];
+
+    callback({ cancel: false, responseHeaders: details.responseHeaders });
+  });
+  // ---------------------------------------------------------------
+
 };
 
 // This method will be called when Electron has finished
@@ -38,6 +52,16 @@ app.whenReady().then(() => {
   });
 });
 
+app.on('web-contents-created', (_, contents) => {
+  contents.session.setPermissionRequestHandler((webContents, permission, callback) => {
+    if (permission === 'geolocation') {
+      callback(true); // allow geolocation
+    } else {
+      callback(false);
+    }
+  });
+});
+
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
@@ -46,6 +70,3 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
