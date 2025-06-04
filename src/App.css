@@ -1,0 +1,69 @@
+:root {
+  --background_1: #121212;
+  --background_2: #1F1B24;
+  --text_color: #FFFFFFDE;
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: var(--background_1);
+    color: var(--text_color);
+}
+
+
+.app_container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 1rem;
+    /* background-color: white; */
+    height: 100vh;
+    width: 100vw;
+    padding: 2vh;
+}
+    
+/* Grid layout */
+/* App.css */
+.div1, .div2, .div3, .div4 {
+    background-color: var(--background_2);
+    border-radius: 20px;
+}
+
+.div1 {
+    grid-column: span 2 / span 2;
+    grid-row: span 2 / span 2;
+    border: solid purple 3px;
+    display: flex; /* Maak div1 een flex container */
+    /* flex-direction: column; Organiseer de inhoud verticaal */
+    min-height: 0; /* Belangrijk voor flex-items binnen een grid om te krimpen */
+}
+
+.legenda {
+    border: solid orange 3px;
+    width: 5vw;
+    border-radius: 20px 0 0 20px;
+}
+
+.div2 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 3;
+    border: solid orange 3px;
+}
+
+.div3 {
+    grid-column: span 2 / span 2;
+    grid-row-start: 3;
+    border: solid blue 3px;
+}
+
+.div4 {
+    grid-column-start: 3;
+    grid-row-start: 3;
+    border: solid red 3px;
+}
+        
