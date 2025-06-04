@@ -69,12 +69,19 @@ window.electronAPI.getIPInfo()
 
 
   return (
-    <div>
+    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
       {userLocation && (
   <MapContainer
     center={[userLocation.lat, userLocation.lng]}
     zoom={13}
-    style={{ height: '600px', width: '100%' }}
+    style={{ 
+      width: '100%', 
+      flexGrow: 1,
+      borderTopRightRadius: '20px', // Pas de waarde aan naar wens
+      borderBottomRightRadius: '20px', // Pas de waarde aan naar wens
+      overflow: 'hidden'
+     }}
+    
       >
         <TileLayer
         url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
