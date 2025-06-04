@@ -24,9 +24,16 @@ const MapView = () => {
   const [markers, setMarkers] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
 
+  
+
   const handleClick = (latlng) => {
     console.log(latlng.lat, latlng.lng);
     setMarkers([...markers, latlng]);
+
+    window.electronAPI.saveCoordinates({
+    lat: latlng.lat,
+    lng: latlng.lng,
+  });
   };
 
   const testFetch = () => {
@@ -37,9 +44,18 @@ const MapView = () => {
       .catch(err => console.error('Fetch error:', err));
   };
 
-  useEffect(() => {
-  fetch('https://ipapi.co/json/')
-    .then(res => res.json())
+  useEffect(() => {   
+window.electronAPI.getCoordinates()
+    .then(coords => {
+      if (coords.length > 0) {
+        const mapped = coords.map(({ breedtegraad, lengtegraad }) => ({
+          lat: breedtegraad,
+          lng: lengtegraad,
+        }));
+        setMarkers(mapped);}
+    });
+
+window.electronAPI.getIPInfo()
     .then(data => {
       const { latitude, longitude } = data;
       setUserLocation({ lat: latitude, lng: longitude });
@@ -54,7 +70,6 @@ const MapView = () => {
 
   return (
     <div>
-      <button onClick={testFetch}>Test API</button>
       {userLocation && (
   <MapContainer
     center={[userLocation.lat, userLocation.lng]}
