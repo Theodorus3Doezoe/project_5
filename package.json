@@ -32,12 +32,13 @@
     "@vercel/webpack-asset-relocator-loader": "^1.7.3",
     "babel-loader": "^10.0.0",
     "css-loader": "^6.11.0",
-    "electron": "^36.3.2",
+    "electron": "34.5.7",
     "node-loader": "^2.1.0",
     "style-loader": "^3.3.4"
   },
   "dependencies": {
-    "@craco/craco": "^5.9.0",
+    "@craco/craco": "^7.1.0",
+    "better-sqlite3": "^11.10.0",
     "electron-squirrel-startup": "^1.0.1",
     "leaflet": "^1.9.4",
     "react": "^19.1.0",

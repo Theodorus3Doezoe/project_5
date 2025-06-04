@@ -24,9 +24,16 @@ const MapView = () => {
   const [markers, setMarkers] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
 
+  
+
   const handleClick = (latlng) => {
     console.log(latlng.lat, latlng.lng);
     setMarkers([...markers, latlng]);
+
+    window.electronAPI.saveCoordinates({
+    lat: latlng.lat,
+    lng: latlng.lng,
+  });
   };
 
   const testFetch = () => {
@@ -37,25 +44,28 @@ const MapView = () => {
       .catch(err => console.error('Fetch error:', err));
   };
 
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const { latitude, longitude } = pos.coords;
-          setUserLocation({ lat: latitude, lng: longitude });
-          setMarkers([{ lat: latitude, lng: longitude }]);
-        },
-        (err) => {
-          console.error("Geolocation error:", err);
-          // fallback to a default location
-          setUserLocation({ lat: 51.505, lng: -0.09 });
-        }
-      );
-    } else {
-      console.error("Geolocation not supported");
-      setUserLocation({ lat: 51.505, lng: -0.09 });
-    }
-  }, []);
+  useEffect(() => {   
+window.electronAPI.getCoordinates()
+    .then(coords => {
+      if (coords.length > 0) {
+        const mapped = coords.map(({ breedtegraad, lengtegraad }) => ({
+          lat: breedtegraad,
+          lng: lengtegraad,
+        }));
+        setMarkers(mapped);}
+    });
+
+window.electronAPI.getIPInfo()
+    .then(data => {
+      const { latitude, longitude } = data;
+      setUserLocation({ lat: latitude, lng: longitude });
+      setMarkers([{ lat: latitude, lng: longitude }]);
+    })
+    .catch((err) => {
+      console.error("IP-based location error:", err);
+      setUserLocation({ lat: 51.505, lng: -0.09 }); // fallback
+    });
+}, []);
 
 
   return (
@@ -74,9 +84,9 @@ const MapView = () => {
     
       >
         <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
+        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+        attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+/>
         {markers.map((pos, idx) => (
           <Marker key={idx} position={[pos.lat, pos.lng]} />
         ))}
