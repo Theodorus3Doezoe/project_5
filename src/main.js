@@ -107,6 +107,12 @@ ipcMain.handle('get-coordinates', () => {
   const statement = db.prepare('SELECT breedtegraad, lengtegraad FROM Positions');
   return statement.all();
 });
+
+const result = db.prepare('INSERT INTO EENHEDEN DEFAULT VALUES').run();
+const runID = result.lastInsertRowid;
+
+global.currentRunID = runID;
+
 ipcMain.handle('get-ip-info', async () => {
   const response = await fetch('https://ipapi.co/json/');
   
